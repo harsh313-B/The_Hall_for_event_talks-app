@@ -44,6 +44,131 @@
     --transition-fast: all 0.15s ease;
 }
 
+/* Light Theme Variables Override */
+body.light-theme {
+    --bg-primary: #f8fafc;      /* Slate 50 */
+    --bg-secondary: #ffffff;    /* White */
+    --bg-tertiary: #f1f5f9;     /* Slate 100 */
+    
+    --text-primary: #0f172a;    /* Slate 900 */
+    --text-secondary: #334155;  /* Slate 700 */
+    --text-muted: #64748b;      /* Slate 500 */
+    
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(15, 23, 42, 0.08);
+    --glass-shadow: 0 12px 40px 0 rgba(15, 23, 42, 0.06);
+    
+    /* Modify badges for light background contrast */
+    --color-feature-bg: rgba(16, 185, 129, 0.08);
+    --color-feature-text: #059669;
+    --color-feature-border: rgba(16, 185, 129, 0.2);
+    
+    --color-issue-bg: rgba(220, 38, 38, 0.08);
+    --color-issue-text: #dc2626;
+    --color-issue-border: rgba(220, 38, 38, 0.2);
+    
+    --color-changed-bg: rgba(37, 99, 235, 0.08);
+    --color-changed-text: #2563eb;
+    --color-changed-border: rgba(37, 99, 235, 0.2);
+    
+    --color-deprecation-bg: rgba(217, 119, 6, 0.08);
+    --color-deprecation-text: #b45309;
+    --color-deprecation-border: rgba(217, 119, 6, 0.2);
+    
+    --color-general-bg: rgba(75, 85, 99, 0.08);
+    --color-general-text: #4b5563;
+    --color-general-border: rgba(75, 85, 99, 0.2);
+}
+
+/* Light mode specific element adjustments */
+body.light-theme .glow-blob {
+    opacity: 0.06;
+    filter: blur(160px);
+}
+
+body.light-theme .hero-title {
+    background: linear-gradient(to right, #0f172a, #1e3a8a, #6d28d9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+body.light-theme .card-body code {
+    background: rgba(15, 23, 42, 0.05);
+    border-color: rgba(15, 23, 42, 0.08);
+    color: #b91c1c; /* Crimson in light mode */
+}
+
+body.light-theme .card-body h4, 
+body.light-theme .card-body strong {
+    color: #0f172a;
+}
+
+body.light-theme .modal-card {
+    background: #ffffff;
+    border-color: rgba(15, 23, 42, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.15);
+}
+
+body.light-theme .update-preview-box {
+    background: rgba(15, 23, 42, 0.03);
+    border-color: rgba(15, 23, 42, 0.06);
+}
+
+body.light-theme .tweet-editor-container textarea {
+    background: rgba(15, 23, 42, 0.02);
+    border-color: rgba(15, 23, 42, 0.1);
+    color: #0f172a;
+}
+
+body.light-theme .tweet-editor-container textarea:focus {
+    border-color: var(--accent-blue);
+    background: #ffffff;
+}
+
+body.light-theme .toast {
+    background: #ffffff;
+    color: #0f172a;
+    box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.1);
+    border: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+body.light-theme .search-wrapper input {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(15, 23, 42, 0.1);
+    color: #0f172a;
+}
+
+body.light-theme .search-wrapper input:focus {
+    background: #ffffff;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.12);
+}
+
+body.light-theme .chip {
+    background: rgba(15, 23, 42, 0.04);
+    border-color: rgba(15, 23, 42, 0.08);
+    color: #334155;
+}
+
+body.light-theme .chip:hover {
+    background: rgba(15, 23, 42, 0.08);
+    border-color: rgba(15, 23, 42, 0.15);
+}
+
+body.light-theme .chip.active {
+    background: rgba(56, 189, 248, 0.1);
+    border-color: var(--accent-blue);
+    color: #0369a1;
+}
+
+body.light-theme .date-heading {
+    color: #0f172a;
+}
+
+body.light-theme .date-group {
+    border-left-color: rgba(15, 23, 42, 0.08);
+}
+
 /* Reset & Base Styles */
 * {
     box-sizing: border-box;

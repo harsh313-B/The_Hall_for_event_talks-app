@@ -17,6 +17,10 @@ const refreshBtnHeader = document.getElementById('refreshBtnHeader');
 const refreshBtnHero = document.getElementById('refreshBtnHero');
 const lastUpdatedBadge = document.getElementById('lastUpdatedBadge');
 const resetFiltersBtn = document.getElementById('resetFiltersBtn');
+const themeToggleBtn = document.getElementById('themeToggleBtn');
+const moonIcon = document.getElementById('moonIcon');
+const sunIcon = document.getElementById('sunIcon');
+const exportCsvBtn = document.getElementById('exportCsvBtn');
 
 // Modal Elements
 const tweetModal = document.getElementById('tweetModal');
@@ -37,12 +41,19 @@ progressCircle.style.strokeDasharray = `${CIRCUMFERENCE} ${CIRCUMFERENCE}`;
 
 // Initialize App
 document.addEventListener('DOMContentLoaded', () => {
+    initializeTheme();
     fetchNotes();
     setupEventListeners();
 });
 
 // Event Listeners Setup
 function setupEventListeners() {
+    // Theme toggle
+    themeToggleBtn.addEventListener('click', toggleTheme);
+    
+    // Export CSV
+    exportCsvBtn.addEventListener('click', exportToCSV);
+
     // Refresh buttons
     refreshBtnHeader.addEventListener('click', fetchNotes);
     refreshBtnHero.addEventListener('click', fetchNotes);
@@ -531,4 +542,79 @@ function updateCharCount() {
     } else {
         progressCircle.style.stroke = 'var(--accent-blue)';
     }
+}
+
+// Theme Management Functions
+function initializeTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+        moonIcon.style.display = 'block';
+        sunIcon.style.display = 'none';
+    } else {
+        document.body.classList.remove('light-theme');
+        moonIcon.style.display = 'none';
+        sunIcon.style.display = 'block';
+    }
+}
+
+function toggleTheme() {
+    const isLight = document.body.classList.toggle('light-theme');
+    if (isLight) {
+        localStorage.setItem('theme', 'light');
+        moonIcon.style.display = 'block';
+        sunIcon.style.display = 'none';
+        showToast('Switched to light mode!', 'success');
+    } else {
+        localStorage.setItem('theme', 'dark');
+        moonIcon.style.display = 'none';
+        sunIcon.style.display = 'block';
+        showToast('Switched to dark mode!', 'success');
+    }
+}
+
+// Export Filtered Release Notes to CSV
+function exportToCSV() {
+    // Collect updates based on currently filtered/searched list
+    let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; // Include BOM for proper UTF-8 handling in Excel
+    csvContent += "Date,Type,Update Text,Link\r\n";
+    
+    let rowsCount = 0;
+    
+    releaseNotes.forEach(entry => {
+        entry.updates.forEach(update => {
+            const matchesType = activeFilter === 'all' || update.type.toLowerCase() === activeFilter;
+            const matchesSearch = !searchQuery || 
+                update.type.toLowerCase().includes(searchQuery) ||
+                update.text.toLowerCase().includes(searchQuery) ||
+                entry.date.toLowerCase().includes(searchQuery);
+                
+            if (matchesType && matchesSearch) {
+                // Escape double quotes in CSV values by doubling them
+                const cleanDate = `"${entry.date.replace(/"/g, '""')}"`;
+                const cleanType = `"${update.type.replace(/"/g, '""')}"`;
+                const cleanText = `"${update.text.replace(/"/g, '""').replace(/\r?\n|\r/g, " ")}"`;
+                const cleanLink = `"${entry.link.replace(/"/g, '""')}"`;
+                
+                csvContent += `${cleanDate},${cleanType},${cleanText},${cleanLink}\r\n`;
+                rowsCount++;
+            }
+        });
+    });
+    
+    if (rowsCount === 0) {
+        showToast("No updates match the current filters to export.", "warning");
+        return;
+    }
+    
+    const encodedUri = encodeURI(csvContent);
+    const downloadLink = document.createElement("a");
+    downloadLink.setAttribute("href", encodedUri);
+    downloadLink.setAttribute("download", `bigquery_release_notes_${activeFilter}_export.csv`);
+    document.body.appendChild(downloadLink);
+    
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+    
+    showToast(`Successfully exported ${rowsCount} updates to CSV!`, 'success');
 }
